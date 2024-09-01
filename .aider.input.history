@@ -221,3 +221,38 @@
 
 # 2024-09-01 13:25:58.720655
 +/run cargo test
+
+# 2024-09-01 13:58:33.824739
++/add migration/src/m20220101_000001_create_table.rs
+
+# 2024-09-01 13:59:01.502801
++/add migration/src/m20220101_000001_create_user_table.rs
+
+# 2024-09-01 13:59:16.960033
++/add documentation/design/data_model.md
+
+# 2024-09-01 13:59:30.245199
++https://www.sea-ql.org/SeaORM/docs/migration/writing-migration/ Modify the create_user_migration file to reflect the data model.
+
+# 2024-09-01 14:03:25.403840
++/add migration/src/m20220101_000001_create_user_table.rs
+
+# 2024-09-01 14:03:29.396044
++/add migration/Cargo.toml
+
+# 2024-09-01 14:03:31.275515
++error[E0432]: unresolved import `sea_orm::Uuid`
++ --> src/m20220101_000001_create_user_table.rs:2:5
++  |
++2 | use sea_orm::Uuid;
++  |     ^^^^^^^^^^^^^ no `Uuid` in the root
++  |
++help: consider importing one of these items instead
++  |
++2 | use crate::ColumnType::Uuid;
++  |     ~~~~~~~~~~~~~~~~~~~~~~~
++2 | use sea_orm_migration::prelude::ColumnType::Uuid;
++  |     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# 2024-09-01 14:03:47.659283
++/undo

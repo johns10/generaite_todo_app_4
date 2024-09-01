@@ -1,4 +1,5 @@
 /target
+/migration/target
 .aider*
 **/*.rs.bk
 Cargo.lock
