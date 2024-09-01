@@ -1,8 +1,6 @@
 /target
 .aider*
-/target
 **/*.rs.bk
 Cargo.lock
 config/local.toml
-.env
 .env
