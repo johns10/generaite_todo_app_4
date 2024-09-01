@@ -256,3 +256,48 @@
 
 # 2024-09-01 14:03:47.659283
 +/undo
+
+# 2024-09-01 14:11:13.289399
++/add Cargo.toml
+
+# 2024-09-01 14:11:15.828905
++/add entity/Cargo.toml
+
+# 2024-09-01 14:11:18.066189
++/add migration/Cargo.toml
+
+# 2024-09-01 14:11:28.563690
++/add entity/src/lib.rs
+
+# 2024-09-01 14:11:33.946958
++/add migration/README.md
+
+# 2024-09-01 14:11:36.027077
++/add migration/src/lib.rs
+
+# 2024-09-01 14:11:38.314225
++/add migration/src/m20220101_000001_create_user_table.rs
+
+# 2024-09-01 14:11:40.801876
++/add migration/src/main.rs
+
+# 2024-09-01 14:12:20.393435
++https://anshulchauhan.com/getting-started-seaorm https://www.sea-ql.org/SeaORM/docs/migration/setting-up-migration/ https://www.sea-ql.org/SeaORM/docs/generate-entity/sea-orm-cli/ Review my migration and entity setup and make any recommendations or improvements
+
+# 2024-09-01 14:13:07.072972
++/run cargo install sea-orm-cli
+
+# 2024-09-01 14:16:43.519396
++/run sea-orm-cli migrate generate create_user_table
+
+# 2024-09-01 14:16:44.458250
++/run cargo run --package migration
+
+# 2024-09-01 14:17:48.023611
++/run sea-orm-cli generate entity -o entity/src --with-serde both
+
+# 2024-09-01 14:18:17.903065
++/run cargo run --package migration
+
+# 2024-09-01 14:18:19.983185
++/run sea-orm-cli generate entity -o entity/src --with-serde both

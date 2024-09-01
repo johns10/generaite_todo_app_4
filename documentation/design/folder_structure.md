@@ -7,7 +7,6 @@ project_root/
 │   ├── api/
 │   ├── routes/
 │   ├── handlers/
-│   ├── models/
 │   ├── services/
 │   ├── repositories/
 │   ├── middleware/
@@ -17,5 +16,6 @@ project_root/
 │   ├── templates/
 │   └── utils/
 ├── migration/
+├── entity/
 ├── tests/
 └── docs/
