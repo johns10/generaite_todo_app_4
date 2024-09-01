@@ -69,13 +69,39 @@
 - Set up metrics collection (e.g., using `prometheus`)
 
 ### 4.4 Configuration Management
-- Use a configuration file (YAML or TOML) for application settings
-- Implement a `Config` struct to hold configuration values
-- Use environment variables for sensitive information
+- Use TOML configuration files for different environments (default, development, test, production)
+- Implement an `AppConfig` struct to hold configuration values
+- Use the `config` crate to manage configuration and environment variables
+- Store sensitive information in environment variables
 
-### 4.5 Middleware
+### 4.5 Database Connection
+- Use SeaORM for database interactions
+- Implement a global database connection instance using `once_cell`
+- Configure connection pooling with appropriate settings
+- Implement connection timeout and retry logic
+
+### 4.6 Middleware
 - Implement custom middleware for common operations (e.g., request timing, CORS)
 - Utilize Axum's built-in middleware where appropriate
+
+## 9. Environment Setup
+
+To set up the application for different environments:
+
+1. Create appropriate configuration files in the `config/` directory (default.toml, development.toml, test.toml, production.toml).
+2. Set the `RUN_MODE` environment variable to specify the environment (e.g., `development`, `test`, `production`).
+3. Use environment variables prefixed with `APP_` to override configuration values (e.g., `APP_DATABASE__URL` to set the database URL).
+4. Ensure sensitive information like database passwords are set using environment variables and not committed to version control.
+
+Example of setting up for development:
+
+```bash
+export RUN_MODE=development
+export APP_DATABASE__URL=postgres://username:password@localhost/todo_app_dev
+cargo run
+```
+
+For production, ensure all necessary environment variables are set in your deployment environment.
 
 ## 5. Testing Strategy
 

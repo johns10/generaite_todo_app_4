@@ -1,0 +1,7 @@
+[database]
+url = "postgres://username:password@localhost/todo_app"
+max_connections = 100
+min_connections = 5
+connect_timeout = 10
+idle_timeout = 300
+max_lifetime = 1800

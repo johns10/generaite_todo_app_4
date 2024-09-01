@@ -1,22 +1,23 @@
-/// Returns a greeting message.
-///
-/// This function is used to demonstrate a simple "Hello, World!" message
-/// and serves as an example for unit testing in Rust.
-fn system_message() -> String {
-    "Hello, World!".to_string()
-}
+mod config;
+mod db;
 
-fn main() {
-    println!("{}", system_message());
-}
+use anyhow::Result;
+use tracing::info;
 
-#[cfg(test)]
-mod tests {
-    use super::*;
+#[tokio::main]
+async fn main() -> Result<()> {
+    // Initialize tracing
+    tracing_subscriber::fmt::init();
 
-    #[test]
-    fn test_system_message_returns_correct_greeting() {
-        let expected = "Hello, World!";
-        assert_eq!(system_message(), expected, "The system_message function should return 'Hello, World!'");
-    }
+    // Load configuration
+    let config = config::AppConfig::new()?;
+
+    // Initialize database connection
+    db::init_db(&config).await?;
+
+    info!("Application started successfully");
+
+    // Your application logic here
+
+    Ok(())
 }

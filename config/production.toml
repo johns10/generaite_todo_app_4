@@ -1,0 +1,4 @@
+[database]
+url = "postgres://username:password@production_host/todo_app_prod"
+max_connections = 200
+min_connections = 10
