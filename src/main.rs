@@ -6,14 +6,16 @@ use tracing::info;
 
 #[tokio::main]
 async fn main() -> Result<()> {
-    // Initialize tracing
-    tracing_subscriber::fmt::init();
-
     // Load configuration
-    let config = config::AppConfig::new()?;
+    let config = &config::CONFIG;
+
+    // Initialize tracing
+    tracing_subscriber::fmt()
+        .with_max_level(config.logging.level.parse()?)
+        .init();
 
     // Initialize database connection
-    db::init_db(&config).await?;
+    db::init_db(config).await?;
 
     info!("Application started successfully");
 

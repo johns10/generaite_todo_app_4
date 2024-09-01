@@ -175,3 +175,46 @@
 
 # 2024-09-01 13:21:51.279894
 +drop *
+
+# 2024-09-01 13:23:53.488509
++/add config/default.toml config/development.toml config/production.toml config/test.toml src/config.rs src/main.rs .env.example documentation/design/architecture.md documentation/design/code_standards.md Cargo.toml
+
+# 2024-09-01 13:24:10.607129
++https://docs.rs/config/latest/config/, https://www.sea-ql.org/SeaORM/docs/install-and-config/connection/, https://docs.rs/axum/latest/axum/ Review and improve the existing configuration file structure for the To-Do application. The current structure includes separate TOML files for development, testing, and production environments, as well as a default configuration file. The task involves refining this structure and implementing best practices for Rust configuration management.
++
++Specifically:
++
++1. Review the existing configuration files in the `config` directory: `default.toml`, `development.toml`, `test.toml`, and `production.toml`. Ensure they cover all necessary settings, including database connection parameters, server settings, and logging levels.
++
++2. Refine the `src/config.rs` file to efficiently load and manage the configuration using the `config` crate. Implement the following:
++
++   a. Create a `Config` struct that represents all possible configuration options.
++   b. Implement a function to load the configuration, merging the default settings with environment-specific overrides.
++   c. Use the builder pattern from the `config` crate to load configurations in the following order: default, environment-specific file, environment variables.
++   d. Implement environment variable overrides for all configuration options, following the naming convention `APP_SECTION__KEY`.
++
++3. Implement configuration validation to ensure all required fields are present and have valid values.
++
++4. For sensitive information like database passwords or API keys, ensure they are not stored directly in the TOML files. Instead, use environment variables or a separate `.env` file for these values.
++
++5. In the `Config` struct, use appropriate Rust types for different configuration values (e.g., `String` for text, `u16` for ports, `Vec<String>` for lists).
++
++6. Implement methods on the `Config` struct to easily access configuration values, such as `get_database_url()` or `get_server_port()`.
++
++7. Use the `once_cell` crate to create a global, lazily-initialized configuration instance that can be easily accessed throughout the application.
++
++8. Update `src/main.rs` to initialize the configuration early in the application startup process.
++
++9. Ensure that the configuration loading process handles errors gracefully, providing meaningful error messages if a configuration file is missing or invalid.
++
++10. Add comments to the `config.rs` file explaining the configuration loading process and how to use the `Config` struct.
++
++11. Update the `.env.example` file to include all possible environment variable overrides, with placeholder values.
++
++Please implement these changes, ensuring that the code follows the project's established code standards and best practices for Rust. The configuration structure should be flexible, secure, and easy to use throughout the application.
+
+# 2024-09-01 13:25:16.910531
++/run cargo update
+
+# 2024-09-01 13:25:28.140585
++/test cargo test

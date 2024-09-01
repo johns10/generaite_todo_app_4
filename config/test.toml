@@ -1,2 +1,5 @@
 [database]
 url = "postgres://username:password@localhost/todo_app_test"
+
+[logging]
+level = "debug"

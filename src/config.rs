@@ -1,6 +1,8 @@
 use config::{Config, ConfigError, Environment, File};
+use once_cell::sync::Lazy;
 use serde::Deserialize;
 use std::env;
+use std::sync::Arc;
 
 #[derive(Debug, Deserialize)]
 pub struct DatabaseConfig {
@@ -13,8 +15,21 @@ pub struct DatabaseConfig {
 }
 
 #[derive(Debug, Deserialize)]
+pub struct ServerConfig {
+    pub host: String,
+    pub port: u16,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct LoggingConfig {
+    pub level: String,
+}
+
+#[derive(Debug, Deserialize)]
 pub struct AppConfig {
     pub database: DatabaseConfig,
+    pub server: ServerConfig,
+    pub logging: LoggingConfig,
 }
 
 impl AppConfig {
@@ -22,21 +37,35 @@ impl AppConfig {
         let run_mode = env::var("RUN_MODE").unwrap_or_else(|_| "development".into());
 
         let s = Config::builder()
-            // Start off by merging in the "default" configuration file
             .add_source(File::with_name("config/default"))
-            // Add in the current environment file
-            // Default to 'development' env
-            // Note that this file is _optional_
             .add_source(File::with_name(&format!("config/{}", run_mode)).required(false))
-            // Add in a local configuration file
-            // This file shouldn't be checked in to git
             .add_source(File::with_name("config/local").required(false))
-            // Add in settings from the environment (with a prefix of APP)
-            // Eg.. `APP_DEBUG=1 ./target/app` would set the `debug` key
-            .add_source(Environment::with_prefix("app"))
+            .add_source(Environment::with_prefix("APP").separator("__"))
             .build()?;
 
-        // You can deserialize (and thus freeze) the entire configuration as
-        s.try_deserialize()
+        let config: AppConfig = s.try_deserialize()?;
+        config.validate()?;
+        Ok(config)
+    }
+
+    fn validate(&self) -> Result<(), ConfigError> {
+        // Add validation logic here
+        // For example:
+        if self.database.max_connections < self.database.min_connections {
+            return Err(ConfigError::Message("max_connections must be greater than or equal to min_connections".into()));
+        }
+        Ok(())
+    }
+
+    pub fn get_database_url(&self) -> &str {
+        &self.database.url
+    }
+
+    pub fn get_server_address(&self) -> String {
+        format!("{}:{}", self.server.host, self.server.port)
     }
 }
+
+pub static CONFIG: Lazy<Arc<AppConfig>> = Lazy::new(|| {
+    Arc::new(AppConfig::new().expect("Failed to load configuration"))
+});

@@ -5,3 +5,10 @@ min_connections = 5
 connect_timeout = 10
 idle_timeout = 300
 max_lifetime = 1800
+
+[server]
+host = "127.0.0.1"
+port = 8080
+
+[logging]
+level = "info"
