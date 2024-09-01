@@ -19,13 +19,15 @@ pub async fn init_db(config: &AppConfig) -> Result<()> {
     let db = Database::connect(opt).await?;
 
     // Perform a simple query to check if the connection is valid
-    let result: Result<Option<(i32,)>, sea_orm::DbErr> = db
+    let result: Result<Option<i32>, sea_orm::DbErr> = db
         .query_one(Statement::from_sql_and_values(
             DbBackend::Postgres,
             "SELECT 1",
             [],
         ))
-        .await;
+        .await?
+        .map(|qr| qr.try_get_by_index::<i32>(0))
+        .transpose();
 
     match result {
         Ok(_) => info!("Database connection successful"),
