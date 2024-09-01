@@ -4,7 +4,7 @@ mod services;
 mod routes;
 
 use anyhow::Result;
-use services::axum_web_server::AxumWebServer;
+use crate::services::axum_web_server::AxumWebServer;
 
 #[tokio::main]
 async fn main() -> Result<()> {
