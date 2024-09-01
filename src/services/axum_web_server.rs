@@ -1,14 +1,14 @@
-use axum::Router;
 use std::net::SocketAddr;
 use crate::routes;
 use crate::config::AppConfig;
+use std::sync::Arc;
 
 pub struct AxumWebServer {
-    config: AppConfig,
+    config: Arc<AppConfig>,
 }
 
 impl AxumWebServer {
-    pub fn new(config: AppConfig) -> Self {
+    pub fn new(config: Arc<AppConfig>) -> Self {
         AxumWebServer { config }
     }
 

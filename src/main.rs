@@ -22,7 +22,7 @@ async fn main() -> Result<()> {
     tracing::info!("Application started successfully");
 
     // Create and run the Axum web server
-    let server = AxumWebServer::new(config);
+    let server = AxumWebServer::new(config.clone());
     server.run().await;
 
     Ok(())
