@@ -343,3 +343,12 @@
 
 # 2024-09-01 14:33:15.990709
 +/run sea-orm-cli generate entity -o entity/src
+
+# 2024-09-01 14:36:06.016867
++Create the category model according to the data model, using the instructions in how_to_write_new_entities.md.
+
+# 2024-09-01 14:36:44.640294
++/run sea-orm-cli migrate up
+
+# 2024-09-01 14:36:50.793821
++/run sea-orm-cli generate entity -o entity/src
