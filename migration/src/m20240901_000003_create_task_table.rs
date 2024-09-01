@@ -1,4 +1,6 @@
 use sea_orm_migration::prelude::*;
+use sea_orm_migration::sea_orm::Statement;
+use sea_orm_migration::sea_query::extension::postgres::Type;
 
 #[derive(DeriveMigrationName)]
 pub struct Migration;
@@ -6,19 +8,16 @@ pub struct Migration;
 #[async_trait::async_trait]
 impl MigrationTrait for Migration {
     async fn up(&self, manager: &SchemaManager) -> Result<(), DbErr> {
-        manager
-            .create_type(
-                Type::create()
-                    .as_enum(TaskStatus::Table)
-                    .values(vec![
-                        TaskStatus::Todo,
-                        TaskStatus::InProgress,
-                        TaskStatus::Done,
-                    ])
-                    .to_owned(),
-            )
-            .await?;
+        let db = manager.get_connection();
 
+        // Create enum type
+        db.execute(Statement::from_string(
+            manager.get_database_backend(),
+            r#"CREATE TYPE task_status AS ENUM ('TODO', 'IN_PROGRESS', 'DONE')"#.to_owned(),
+        ))
+        .await?;
+
+        // Create task table
         manager
             .create_table(
                 Table::create()
@@ -27,11 +26,7 @@ impl MigrationTrait for Migration {
                     .col(ColumnDef::new(Task::Id).uuid().not_null().primary_key())
                     .col(ColumnDef::new(Task::Title).string().not_null())
                     .col(ColumnDef::new(Task::Description).text().not_null())
-                    .col(ColumnDef::new(Task::Status).enumeration(TaskStatus::Table, vec![
-                        TaskStatus::Todo.to_string(),
-                        TaskStatus::InProgress.to_string(),
-                        TaskStatus::Done.to_string(),
-                    ]).not_null())
+                    .col(ColumnDef::new(Task::Status).custom(TaskStatus::Table).not_null())
                     .col(ColumnDef::new(Task::DueDate).date_time())
                     .col(ColumnDef::new(Task::UserId).uuid().not_null())
                     .col(ColumnDef::new(Task::CategoryId).uuid())
@@ -55,13 +50,21 @@ impl MigrationTrait for Migration {
     }
 
     async fn down(&self, manager: &SchemaManager) -> Result<(), DbErr> {
+        let db = manager.get_connection();
+
+        // Drop task table
         manager
             .drop_table(Table::drop().table(Task::Table).to_owned())
             .await?;
 
-        manager
-            .drop_type(Type::drop().name(TaskStatus::Table).to_owned())
-            .await
+        // Drop enum type
+        db.execute(Statement::from_string(
+            manager.get_database_backend(),
+            "DROP TYPE task_status".to_owned(),
+        ))
+        .await?;
+
+        Ok(())
     }
 }
 
@@ -82,9 +85,6 @@ enum Task {
 #[derive(Iden)]
 enum TaskStatus {
     Table,
-    Todo,
-    InProgress,
-    Done,
 }
 
 #[derive(Iden)]
