@@ -11,7 +11,7 @@ async fn main() -> Result<()> {
 
     // Initialize tracing
     tracing_subscriber::fmt()
-        .with_max_level(config.logging.level.parse()?)
+        .with_max_level(config.logging.parse_level().unwrap_or(tracing::Level::INFO))
         .init();
 
     // Initialize database connection

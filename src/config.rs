@@ -20,9 +20,17 @@ pub struct ServerConfig {
     pub port: u16,
 }
 
+use tracing::Level;
+
 #[derive(Debug, Deserialize)]
 pub struct LoggingConfig {
     pub level: String,
+}
+
+impl LoggingConfig {
+    pub fn parse_level(&self) -> Result<Level, String> {
+        self.level.parse().map_err(|_| format!("Invalid log level: {}", self.level))
+    }
 }
 
 #[derive(Debug, Deserialize)]
