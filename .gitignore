@@ -5,3 +5,4 @@
 Cargo.lock
 config/local.toml
 .env
+.env
