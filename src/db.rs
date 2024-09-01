@@ -1,7 +1,7 @@
 use crate::config::AppConfig;
 use anyhow::Result;
 use once_cell::sync::OnceCell;
-use sea_orm::{ConnectOptions, Database, DatabaseConnection, Statement};
+use sea_orm::{ConnectOptions, Database, DatabaseConnection, Statement, ConnectionTrait, DbBackend};
 use std::time::Duration;
 use tracing::info;
 
@@ -20,9 +20,10 @@ pub async fn init_db(config: &AppConfig) -> Result<()> {
 
     // Perform a simple query to check if the connection is valid
     let result: Result<Option<(i32,)>, sea_orm::DbErr> = db
-        .query_one(Statement::from_string(
-            db.get_database_backend(),
-            "SELECT 1".to_owned(),
+        .query_one(Statement::from_sql_and_values(
+            DbBackend::Postgres,
+            "SELECT 1",
+            [],
         ))
         .await;
 
