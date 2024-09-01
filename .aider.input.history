@@ -301,3 +301,45 @@
 
 # 2024-09-01 14:18:19.983185
 +/run sea-orm-cli generate entity -o entity/src --with-serde both
+
+# 2024-09-01 14:23:20.241727
++/test cargo test
+
+# 2024-09-01 14:23:37.534008
++/run cargo test
+
+# 2024-09-01 14:30:45.023706
++drop *
+
+# 2024-09-01 14:30:52.932770
++/drop *
+
+# 2024-09-01 14:30:57.592258
++/add documentation/design/data_model.md
+
+# 2024-09-01 14:31:13.907638
++/add /documentation/guides/how_to_write_new_entity.md
+
+# 2024-09-01 14:31:22.654748
++/add documentation/guides/how_to_write_new_entity.md
+
+# 2024-09-01 14:31:25.568734
++/add migration/Cargo.toml
+
+# 2024-09-01 14:31:33.938442
++/drop migration/Cargo.toml
+
+# 2024-09-01 14:31:46.270160
++/add migration/src/lib.rs
+
+# 2024-09-01 14:31:52.804155
++/add migration/src/main.rs
+
+# 2024-09-01 14:32:22.484828
++Create the task model according to the data model, using the instructions in how_to_write_new_entities.md.
+
+# 2024-09-01 14:32:48.441044
++/run sea-orm-cli migrate up
+
+# 2024-09-01 14:33:15.990709
++/run sea-orm-cli generate entity -o entity/src
