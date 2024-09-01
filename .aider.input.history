@@ -352,3 +352,48 @@
 
 # 2024-09-01 14:36:50.793821
 +/run sea-orm-cli generate entity -o entity/src
+
+# 2024-09-01 14:46:57.173414
++/add documentation/design/data_model.md entity/src/task.rs entity/src/lib.rs migration/src/m20240901_000003_create_task_table.rs documentation/design/code_standards.md documentation/guides/how_to_write_new_entity.md
+
+# 2024-09-01 14:47:13.132993
++ https://www.sea-ql.org/SeaORM/docs/generate-entity/enumeration/ implement the task status enum and use it on the task model
+
+# 2024-09-01 15:07:30.483853
++/run sea-orm-cli migrate up
+
+# 2024-09-01 15:07:53.127642
++help
+
+# 2024-09-01 15:07:56.343479
++/help
+
+# 2024-09-01 15:08:12.599507
++/run sea-orm-cli migrate up
+
+# 2024-09-01 15:08:57.961983
++/run sea-orm-cli migrate up
+
+# 2024-09-01 15:09:24.099598
++/run sea-orm-cli generate entity -o entity/src
+
+# 2024-09-01 15:09:35.473964
++/test cargo test
+
+# 2024-09-01 15:25:56.114593
++/add documentation/guides/how_to_set_up_axum.md src/main.rs 
+
+# 2024-09-01 15:26:53.599004
++https://docs.rs/axum/latest/axum/#modules add axum web server to this project, using `how_to_set_up_axum.md` and the included documentation.
+
+# 2024-09-01 15:27:43.970365
++/run cargo add axum
+
+# 2024-09-01 15:27:46.838871
++/run cargo add tokio --features full
+
+# 2024-09-01 15:27:47.517057
++/run cargo add tower
+
+# 2024-09-01 15:27:59.007983
++/run cargo run
