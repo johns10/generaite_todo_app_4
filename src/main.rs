@@ -1,13 +1,15 @@
 mod config;
 mod db;
+mod services;
+mod routes;
 
 use anyhow::Result;
-use tracing::info;
+use services::axum_web_server::AxumWebServer;
 
 #[tokio::main]
 async fn main() -> Result<()> {
     // Load configuration
-    let config = &config::CONFIG;
+    let config = config::CONFIG.clone();
 
     // Initialize tracing
     tracing_subscriber::fmt()
@@ -15,11 +17,13 @@ async fn main() -> Result<()> {
         .init();
 
     // Initialize database connection
-    db::init_db(config).await?;
+    db::init_db(&config).await?;
 
-    info!("Application started successfully");
+    tracing::info!("Application started successfully");
 
-    // Your application logic here
+    // Create and run the Axum web server
+    let server = AxumWebServer::new(config);
+    server.run().await;
 
     Ok(())
 }
