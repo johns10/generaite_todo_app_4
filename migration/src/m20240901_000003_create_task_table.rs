@@ -7,6 +7,19 @@ pub struct Migration;
 impl MigrationTrait for Migration {
     async fn up(&self, manager: &SchemaManager) -> Result<(), DbErr> {
         manager
+            .create_type(
+                Type::create()
+                    .as_enum(TaskStatus::Table)
+                    .values(vec![
+                        TaskStatus::Todo,
+                        TaskStatus::InProgress,
+                        TaskStatus::Done,
+                    ])
+                    .to_owned(),
+            )
+            .await?;
+
+        manager
             .create_table(
                 Table::create()
                     .table(Task::Table)
@@ -14,7 +27,11 @@ impl MigrationTrait for Migration {
                     .col(ColumnDef::new(Task::Id).uuid().not_null().primary_key())
                     .col(ColumnDef::new(Task::Title).string().not_null())
                     .col(ColumnDef::new(Task::Description).text().not_null())
-                    .col(ColumnDef::new(Task::Status).string().not_null())
+                    .col(ColumnDef::new(Task::Status).enumeration(TaskStatus::Table, vec![
+                        TaskStatus::Todo.to_string(),
+                        TaskStatus::InProgress.to_string(),
+                        TaskStatus::Done.to_string(),
+                    ]).not_null())
                     .col(ColumnDef::new(Task::DueDate).date_time())
                     .col(ColumnDef::new(Task::UserId).uuid().not_null())
                     .col(ColumnDef::new(Task::CategoryId).uuid())
@@ -40,6 +57,10 @@ impl MigrationTrait for Migration {
     async fn down(&self, manager: &SchemaManager) -> Result<(), DbErr> {
         manager
             .drop_table(Table::drop().table(Task::Table).to_owned())
+            .await?;
+
+        manager
+            .drop_type(Type::drop().name(TaskStatus::Table).to_owned())
             .await
     }
 }
@@ -56,6 +77,14 @@ enum Task {
     CategoryId,
     CreatedAt,
     UpdatedAt,
+}
+
+#[derive(Iden)]
+enum TaskStatus {
+    Table,
+    Todo,
+    InProgress,
+    Done,
 }
 
 #[derive(Iden)]
